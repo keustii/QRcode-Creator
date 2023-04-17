@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Générer un code QR</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Inclure la bibliothèque qrcode.js via CDN -->
+  <script src="js/qrcode.min.js"></script>
+  <!-- Inclure Material-UI et les polices -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="css/mui.css" />
+  <script src="js/material.js"></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      flex-direction: column;
+      font-family: 'Roboto', sans-serif;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Générer un code QR</h1>
+
+  <!-- Créer un formulaire pour saisir le type de QR code, le SSID, le mot de passe ou l'URL -->
+  <form>
+    <label for="qrType">Type de QR code :</label>
+    <select id="qrType" name="qrType" class="mui-select">
+      <option value="wifi">WiFi</option>
+      <option value="url">URL</option><!-- Ajoutez ces éléments à votre formulaire -->
+    </select>
+    <label for="colorMode">Mode de couleur :</label>
+<select id="colorMode" name="colorMode" class="mui-select">
+  <option value="random">Aléatoire</option>
+  <option value="picker">Sélection manuelle</option>
+</select>
+<label for="qrColor">Couleur du QR code :</label>
+<input type="color" id="qrColor" name="qrColor" class="mui-textfield-input" disabled><br><br>
+</select>
+    <div id="wifiFields">
+      <label for="ssid">SSID:</label>
+      <input type="text" id="ssid" name="ssid" class="mui-textfield-input"><br><br>
+      <label for="password">Mot de passe:</label>
+      <input type="password" id="password" name="password" class="mui-textfield-input"><br><br>
+    </div>
+    <div id="urlFields" style="display: none;">
+      <label for="url">URL:</label>
+      <input type="url" id="url" name="url" class="mui-textfield-input"><br><br>
+    </div>
+    <input type="button" value="Générer le code QR" onclick="generateQR()" class="mui-btn mui-btn-raised">
+    <input type="button" value="Exporter le QR code" onclick="exportQRCode()" class="mui-btn mui-btn-raised">
+  </form>
+
+  <!-- Div pour afficher le code QR généré -->
+  <div id="qrcode" style="margin-top: 20px;"></div>
+
+  <!-- Fonction pour générer le code QR -->
+  <script>
+    const qrTypeSelect = document.getElementById("qrType");
+    const wifiFields = document.getElementById("wifiFields");
+    const urlFields = document.getElementById("urlFields");
+
+    qrTypeSelect.addEventListener("change", function() {
+      if (qrTypeSelect.value === "wifi") {
+        wifiFields.style.display = "block";
+        urlFields.style.display = "none";
+      } else if (qrTypeSelect.value === "url") {
+        wifiFields.style.display = "none";
+        urlFields.style.display = "block";
+      }
+    });
+
+    document.getElementById("colorMode").addEventListener("change", function() {
+      var colorMode = document.getElementById("colorMode").value;
+      var qrColorInput = document.getElementById("qrColor");
+
+      if (colorMode === "random") {
+        qrColorInput.disabled = true;
+      } else if (colorMode === "picker") {
+        qrColorInput.disabled = false;
+      }
+    });
+
+  function generateQR() {
+      var qrcodeDiv = document.getElementById("qrcode");
+      qrcodeDiv.innerHTML = ""; // Effacer le contenu de la div qrcode
+
+      var qrText = "";
+      if (qrTypeSelect.value === "wifi") {
+        var ssid = document.getElementById("ssid").value;
+        var password = document.getElementById("password").value;
+        var securityType = "WPA";
+        qrText = `WIFI:S:${ssid};T:${securityType};P:${password};;`;
+      } else if (qrTypeSelect.value === "url") {
+        qrText = document.getElementById("url").value;
+      }
+
+      var colorMode = document.getElementById("colorMode").value;
+      var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+      var pickedColor = document.getElementById("qrColor").value;
+
+      var qr = new QRCode(qrcodeDiv, {
+        text: qrText,
+        width: 256,
+        height: 256,
+        colorDark: colorMode === "random" ? randomColor : pickedColor,
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+  var qrcodeDiv = document.getElementById("qrcode");
+  qrcodeDiv.innerHTML = ""; // Effacer le contenu de la div qrcode
+
+  var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+  var qr = new QRCode(qrcodeDiv, {
+    text: qrText,
+    width: 256,
+    height: 256,
+    colorDark: randomColor,
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+
+
+function exportQRCode() {
+  var canvas = document.querySelector("#qrcode canvas");
+  if (canvas) {
+    var link = document.createElement("a");
+    link.download = "qrcode.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  } else {
+    alert("Veuillez générer un QR code avant de l'exporter.");
+  }
+}
+  </script>
+</body>
+</html>

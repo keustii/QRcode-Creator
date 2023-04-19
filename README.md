@@ -4,7 +4,7 @@ Ce projet est une application Web qui permet de générer un code QR à partir d
 
 ## Utilisation
 
-Pour utiliser cette application, ouvrez simplement le fichier `index.html` dans votre navigateur préféré. Vous pouvez alors remplir les champs de formulaire pour définir les paramètres du code QR que vous souhaitez générer, puis cliquer sur le bouton "Générer le code QR" pour créer le code. Vous pouvez ensuite cliquer sur le bouton "Exporter le QR code" pour télécharger une image PNG du code QR généré.
+Pour utiliser cette application, ouvrez simplement le fichier `qrcode.html` dans votre navigateur préféré. Vous pouvez alors remplir les champs de formulaire pour définir les paramètres du code QR que vous souhaitez générer, puis cliquer sur le bouton "Générer le code QR" pour créer le code. Vous pouvez ensuite cliquer sur le bouton "Exporter le QR code" pour télécharger une image PNG du code QR généré.
 
 ## Technologies utilisées
 
